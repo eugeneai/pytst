@@ -1,7 +1,8 @@
 pytst 1.00 README
 =================
 
-© Nicolas Lehuen 2004-2005\
+© Nicolas Lehuen 2004-2005
+
 This work is released under the LGPL license - see the LICENSE file for
 more information.
 
@@ -57,13 +58,13 @@ First of all, get the files in the
 [download](http://nicolas.lehuen.com/download/pytst/) directory. If
 you're lucky, there is a binary installer right for you environment (I
 usually provide builds for Win32). If not, you're going to build the
-module from the sources.\
-\
+module from the sources.
+
 pytst is a standard Python module, with a classic <span
 style="font-family: monospace;">setup.py install</span> installation
 procedure. However, the native part of the module is written in C++, so
 your mileage may vary. I have successfully built the module on those
-environments :\
+environments :
 
 -   Python 2.3 + MinGW (GCC 3.4.x) + Windows XP. See
     [here](http://sebsauvage.net/python/mingw.html) for more information
@@ -77,7 +78,7 @@ environments :\
 
 If you manage to build pytst on any other environment, send me a mail so
 that I can add it to this list ! Even better, we could add the binaries
-to the downloads directory.\
+to the downloads directory.
 
 Running the tests
 -----------------
@@ -85,12 +86,12 @@ Running the tests
 Well, for now, the test are really crappy. I only have one script using
 <span style="font-family: monospace;">unittest</span>, the other ones
 don't say anything  about the test passing or failing. So for now,
-forget about running the test and go straight to the...\
+forget about running the test and go straight to the...
 
 Ternary Search Tree crash course
 --------------------------------
 
-OK, so first, the basics :\
+OK, so first, the basics :
 
     >>> import tst
     >>> t = tst.TST()
@@ -116,7 +117,7 @@ instances. Sorry, Unicode is not supported now, mostly because I haven't
 found a way yet to have SWIG handle Unicode. If  you want to use Unicode
 strings as keys, you have to consistently encode them before storing
 them, preferably in UTF8 since it has the nice property of not breaking
-the measurement of Levenshtein distances :\
+the measurement of Levenshtein distances :
 
     >>> import tst
     >>> t = tst.TST()
@@ -131,14 +132,14 @@ the measurement of Levenshtein distances :\
 Talk about a crash course (wink wink, nudge nudge). Oh, yes, it's dirty,
 but the nice thing about the process being killed is that it saves you
 from the mess that would result of mixing byte strings and Unicode
-strings in the same TST.\
-\
+strings in the same TST.
+
 So, what have we learned so far ? pytst is a kind of dictionary, which
 handles string keys only, and crash in a not so nice way when given
 Unicode strings. However, if you read the introduction carefuly, you
-know that there is more to ternary search trees than this.\
+know that there is more to ternary search trees than this.
 
-Using a TST to tokenize a string\
+Using a TST to tokenize a string
 ---------------------------------
 
 The first usage you can make of a ternary search tree is to use it to
@@ -147,23 +148,23 @@ thousand lexers you can find on the Internet ? Well, try building a
 ruleset for your favorite lexer with a thousand different token
 definitions. Now try this with ten thousands, a hundred thousands, a
 million token definition. The lexer will explode, whereas a TST will
-not.\
-\
+not.
+
 Clearly, the features of the TST scanning algorithm are much less
 flexible (don't try to compare them to what you can do with regular
 expressions, for example), but it scales a lot well. Why would you want
 to handle a million different token definition ? Well, that's up to you,
-but DNA sequences parsing comes to mind.\
-\
+but DNA sequences parsing comes to mind.
+
 How does the scanning algorithm scales ? Well, like the
 [Aho-Corasick](http://www-sr.informatik.uni-tuebingen.de/%7Ebuehler/AC/AC.html)
 algorithm. The algorithm reads each character from the input string only
 once, then does its little dance within the TST data structures. Believe
 me, this is fast, [as described
-here](http://www.lehuen.com/nicolas/index.php/2005/04/06/48-pytst-performance).\
-\
+here](http://www.lehuen.com/nicolas/index.php/2005/04/06/48-pytst-performance).
+
 Now let's see a little bit of code. You initialize the TST with all the
-tokens you are looking for, then launch the scan :\
+tokens you are looking for, then launch the scan :
 
     >>> import tst
     >>> t = tst.TST()
@@ -185,8 +186,7 @@ not from their suffix. ( Maybe that's not how ribosoms parse the DNA
 (more exactly, the
 [mRNA](http://www.cytochemistry.net/Cell-biology/ribosome.htm)), so this
 limitation may render the algorithm useless for DNA sequence analysis,
-after all. Anyway... )\
-\
+after all. Anyway... )
 
 The <span style="font-family: monospace;">TupleListAction</span> callback class
 -------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ the second item is the key length and the third item is the object
 associated to the key in the TST. If the first item is a substring from
 the scanned string, the second item is the substring length with a
 negative sign, and the third item is None. Typically, the result object
-can be used like this :\
+can be used like this :
 
     >>> import sys
     >>> for matched_string, matched_length, matched_object in result:
@@ -219,7 +219,7 @@ transcribing rules very efficiently.  Well, that's not totally true,
 since you first have to parse the string to obtain a list of tokens,
 then iterate on the list of tokens to write something. Why not produce
 the output while we're scanning the input string ? That's why the tst
-module has other action callbacks.\
+module has other action callbacks.
 
 The <span style="font-family: monospace;">CallableAction</span> callback class
 ------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ style="font-family: monospace;">TupleListAction</span>. The second one
 is called at the end of the scan, without any arguments. Its return
 value is returned by the <span
 style="font-family: monospace;">scan</span> method, which allows you to
-write shortcuts like :\
+write shortcuts like :
 
     >>> class Counter(object):
     ...     def __init__(self):
@@ -264,7 +264,7 @@ write shortcuts like :\
 You can even subclass <span
 style="font-family: monospace;">tcc.CallableAction</span> for more
 compacity. For example, you could reimplement <span
-style="font-family: monospace;">TupleListAction</span> like this :\
+style="font-family: monospace;">TupleListAction</span> like this :
 
     >>> class MyTupleListAction(tst.CallableAction):
     ...   def __init__(self):
@@ -281,10 +281,10 @@ style="font-family: monospace;">TupleListAction</span> like this :\
 Of course this version is less efficient than the original <span
 style="font-family: monospace;">tst.TupleListAction</span> which saves
 one or two layer of wrappers by going directly from the TST C++ API to
-the Python C API.\
+the Python C API.
 
 The <span style="font-family: monospace;">DictAction</span> and <span style="font-family: monospace;">ListAction</span> callback classes
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-TBD...\
+TBD...
 
